@@ -14,13 +14,7 @@ while True:
     while True:
         # igrac x unosi broj polja
         igrac_x=input('Igra igrac x:')
-
-        # napravi validaciju igraca x
-        #     -proveri jel broj 1-9
-        #     - provjeri jel polje zauzeto
-        # ako vlaidacija nije prosla onda pitaj igraca x za pnoovni unos
         if igrac_x in dozvoljena_polja and igrac_x not in lista_x and igrac_x not in lista_o:
-            # ubaci u lista x broj polja
             lista_x.append(igrac_x)
             break
         else:
@@ -56,15 +50,8 @@ while True:
         break
 
     while True:
-        # igrac o unosi broj polja
         igrac_O=input('Igra igrac o:')
-
-        # napravi validaciju igraca o
-        #     -proveri jel broj 1-9
-        #     - provjeri jel polje zauzeto
-        # ako vlaidacija nije prosla onda pitaj igraca o za pnoovni unos
         if igrac_O in dozvoljena_polja and igrac_O not in lista_x and igrac_O not in lista_o:
-            # ubaci u lista o broj polja
             lista_o.append(igrac_O)
             break
         else:
@@ -99,23 +86,3 @@ while True:
         print(izjednaceno)
         break
 
-
-# # imamo dvije liste:
-# #     - lista x- pmatimo polja za igraca x
-# #     - lista o- pamtimo polja za igraca o
-
-# # igrac x unosi broj polja
-# # napravi validaciju igraca x
-# #     -proveri jel broj 1-9
-# #     - provjeri jel polje zauzeto
-# # ako vlaidacija nije prosla onda piraj igraca x za pnoovni unos
-# # ubaci u lista x broj polja
-# # Provjeri je li igra zavrsila, ako da, ispisi rezultat
-
-# # igrac o unosi broj polja
-# # napravi validaciju igraca o
-# #     -proveri jel broj 1-9
-# #     - provjeri jel polje zauzeto
-# # ako vlaidacija nije prosla onda piraj igraca o za pnoovni unos
-# # ubaci u lista o broj polja
-# # Provjeri je li igra zavrsila, ako da, ispisi rezultat
