@@ -1,14 +1,13 @@
 class DictDatabase:
     def __init__(self):
-        self.baza= dict() #svaki put kad korisnik pozove DictDatabase uvijek se stvori dictionary
-
-    def create(self, key, value): #zelimo implementirati CRUD
-        if key in self.baza:   #da ne moze korisnik ubaciti isti key, da se ne prebrise
+        self.baza= dict() 
+    def create(self, key, value): 
+        if key in self.baza:   
             return False
         if type(key)!=str:
             return False
         
-        self.baza[key]= value #u nas dictionary dodali jedan par kljuca i valua 
+        self.baza[key]= value 
         return True
     
     def read(self,key):
@@ -17,14 +16,14 @@ class DictDatabase:
         return self.baza[key]
     
     def update(self,key,value):
-        if key in self.baza: #provjerimo je li key vec unutra
+        if key in self.baza: 
             exists=True
         else:
             exists=False
 
-        self.baza[key]=value #dodamo ako nije, a update-amo ako je bio unutra
+        self.baza[key]=value 
 
-        return exists # javimo true ili false, ovisno je li prije updatea postojao vec ili ne
+        return exists
     
     def delete(self,key):
         if key not in self.baza:
@@ -35,12 +34,12 @@ class DictDatabase:
 
     
 def main():
-    database=DictDatabase() #kreirali smo objekt koji nam glumi bazu podataka. Init pridruzi 
+    database=DictDatabase() 
 
     check=database.create('test', 10)
     print(check)
     print(database.read('test'))
-    print(database.update('test','nemamo predavanja'))
+    print(database.update('test','nnnn'))
     print(database.read('test'))
     print(database.delete('test'))
     print(database.read('test'))
