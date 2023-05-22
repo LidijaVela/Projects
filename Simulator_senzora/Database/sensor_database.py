@@ -59,7 +59,7 @@ class SensorDatabase:
         cursor.close()
 
 
-    def _update(self,table_name,column,value): #ovaj _ prije update, ta metoda postaje privatna metoda. Ta metoda nitko iz vana ne moze zvati, ona je samo pomocna metoda. 
+    def _update(self,table_name,column,value): 
         cursor = self.connection.cursor()
         query=f'UPDATE {table_name} SET {column}={value};' 
         cursor.execute(query)
@@ -80,7 +80,7 @@ class SensorDatabase:
 
     def read_display(self):
         cursor = self.connection.cursor()
-        query=f'SELECT * FROM {self.display};' #SELECT col1, col2, col3 FROM table_name WHERE...
+        query=f'SELECT * FROM {self.display};' 
         cursor.execute(query)
         record=cursor.fetchone()
         cursor.close()
