@@ -27,6 +27,6 @@ def test():
 
     print (json_text)
 
-if __name__=='__main__': #ako mi stisnemo play, pokrenemo samo ovaj fajl a ne main, onda ce se pokrenuti test, a ako neki developer pozove nasu metodu s import, test se nece izvrsiti
+if __name__=='__main__': 
     test()
 
