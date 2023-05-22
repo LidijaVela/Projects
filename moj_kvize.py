@@ -1,4 +1,4 @@
-# popravak kviza s funkcijom
+
 def generiraj_pitanje(pitanje,odgovor):
     print(pitanje)
     odgovor_korisnika=input('Odgovor:')
