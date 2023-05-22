@@ -3,7 +3,7 @@ from GUI.gui import GUI
 from Database.sensor_database import SensorDatabase
 
 
-class State:  #sacuvamo neko stanje koje je nama bitno, pocetno stanje kad kreiramo taj objekt
+class State: 
    
     def __init__(self,database):
         self.database=database
@@ -14,9 +14,9 @@ class State:  #sacuvamo neko stanje koje je nama bitno, pocetno stanje kad kreir
         self.switches=[False]*4
         self.display=''
 
-    def set_temperature(self,value): #kad pozovem ovu funciju,zelim da s enesto spremi u bazu pod.
+    def set_temperature(self,value): 
         self.temperature=value 
-        self.database.update_temperature(value) #ako zelimo upisati u bazu, samo vidimo kako pozivamo (update_temperature)
+        self.database.update_temperature(value) 
 
     def set_pressure(self,value):
         self.pressure=value
@@ -36,16 +36,12 @@ class State:  #sacuvamo neko stanje koje je nama bitno, pocetno stanje kad kreir
 
 
 def main():
-    database = SensorDatabase('Sensors.db', 'Scorll', 'Light', 'Display') #kreiraj objekt sensordatabase
-    database.create_tables() # pa probamo napraviti tablicu
-    database.reset_to_defaults() #da aplikacija krene ispocetka kad je pokrenemo
-    state=State(database) #ovaj objekt nam cuva stanje, za tvoje stanje bitna je baza podataka
-    #objekt je state, on moze napraviti neku akciju, a to je set temperature jer je to definirano u klasi State
-    #state zna da postoji database i moze update temperaturu 
+    database = SensorDatabase('Sensors.db', 'Scorll', 'Light', 'Display') 
+    database.create_tables() 
+    database.reset_to_defaults() 
+    state=State(database) 
 
-    gui=GUI(state) #stvaramo objekt gui, dodajemo callback tako sto dodajemo klasu State, jer je to komunikacija izmedju GUI i main. py, oni komunicijrau pomocu poziva metoda
-    #main stvara gui koji zna da postoji state, ali ne moze direktno komunicirti s bazom, moze samo raditi akcije koje definiramo u stateu
-
+    gui=GUI(state)
     gui.mainloop()
 
 if __name__ == '__main__':
