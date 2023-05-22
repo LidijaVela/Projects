@@ -4,7 +4,7 @@ from tkinter import ttk
 class GUI:
     def __init__(self,state):
 
-        self.state=state #kao sto state ima bazu podataka, tako u gui mora imati state 
+        self.state=state 
 
         root = tk.Tk()
         root.title('Senzor')
@@ -12,7 +12,7 @@ class GUI:
 
         root.after(2,self.update_display) #2 sekunde nakon sto se porene root on ce pokrneuti nasu funkciju update desplay
 
-        self.root=root #to je atribut klase, jer ima self 
+        self.root=root 
 
         vlaga = tk.Label(root, text='Vlaga:',font=("Arial", 10))
         vlaga.grid(column=0, row=0, padx=5, pady=5)
@@ -22,7 +22,7 @@ class GUI:
 
         temperatura = tk.Label(root, text='Temperatura:',font=("Arial", 10))
         temperatura.grid(column=0, row=1, padx=5, pady=5)
-        slider_temperatura = tk.Scale(orient = 'horizontal', length = 300, from_ = -20, to=50,bg='white',command=self.temp_change) #dodamo command, kad se ti promjenis pozovi ovu metodu temp change
+        slider_temperatura = tk.Scale(orient = 'horizontal', length = 300, from_ = -20, to=50,bg='white',command=self.temp_change) 
         slider_temperatura.grid(column=1, columnspan=3, row=1)
         self.slider_temperatura=slider_temperatura
 
@@ -53,10 +53,10 @@ class GUI:
         self.textbox=textbox
 
 
-    def temp_change(self, event): #ona se okine kad korsnik mice slider 
-        temperature=self.slider_temperatura.get() #od slidera smo trazili koja mu je vrijednost
-        self.state.set_temperature(temperature) #saljemo mainu informaciju ovu od gore 
-        #state je objekt koji je stvorio main, a mozemo do njega jer smo ga spremili u gui, mi znamo da on ima metodu set_temperature pa je zovemo
+    def temp_change(self, event): 
+        temperature=self.slider_temperatura.get() 
+        self.state.set_temperature(temperature) 
+        
 
     def press_change(self,event):
         pressure=self.slider_tlak.get()
