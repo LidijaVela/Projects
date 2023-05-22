@@ -1,11 +1,3 @@
-# random Module
-# racunalo izabere
-# pa korisnik izabere pomocu menija (1 2 3 )
-# ispisi jel jednako, pobjedilo racunalo ili korisnik
-
-# racunalo generira slucajno p s k 
-# korisnik uspisuje svoj odbabir
-# ispis pobjednika
 
 import random
 
