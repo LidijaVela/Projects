@@ -8,9 +8,9 @@ def get_json_data(url,params):
     Ako se dogodila greska, tj. status code nije bio 200 ili se dogodio exception,
     funkcija vraca None.
     '''
-    try: #ako duboko pukne, onda try
+    try: 
         response=requests.get(url,params=params)
-        if response.status_code != 200: #ako smo dobro komunicirali, ali ne razumije nas server, onda ovo
+        if response.status_code != 200: 
             print(f'Error, status code{response.status_code}, response {response.text}')
             return None
         return response.text
