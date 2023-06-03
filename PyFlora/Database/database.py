@@ -6,7 +6,9 @@ class FloraDatabase:
         self.biljka=biljka
         self.posuda=posuda
 
-        self.connection=sqlite3.connect(self.database_name)
+        self.connection = sqlite3.connect(self.database_name)
+        # omoguciti da return bude kao dictionary
+        self.connection.row_factory = sqlite3.Row
 
     def close(self):
         self.connection.close()
@@ -14,7 +16,7 @@ class FloraDatabase:
     def create_tables(self):
         biljke_table= f"""CREATE TABLE IF NOT EXISTS {self.biljka} (
                             id INTEGER PRIMARY KEY,
-                            naziv REAL NOT NULL,
+                            ime_biljke REAL NOT NULL UNIQUE,
                             slika REAL NOT NULL,
                             vlaznost INTEGER NOT NULL,
                             svjetlo INTEGER NOT NULL,
@@ -24,6 +26,7 @@ class FloraDatabase:
                             id INTEGER PRIMARY KEY,
                             naziv REAL NOT NULL,
                             biljka TEXT,
+                            UNIQUE (biljka, naziv)
                             FOREIGN KEY (biljka) REFERENCES biljke_table(naziv)
                         );"""
         
@@ -33,51 +36,83 @@ class FloraDatabase:
         self.connection.commit()
         cursor.close()
 
-    def insert_biljka(self,naziv, slika, vlaznost, svjetlo, supstrat):
-        query= f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (?, ?, ?, ?, ?);'
+
+    def base_fillup(self):
+        self.insert_biljka('Bosiljak', 'bosiljak.jpg', 60, 80, True)
+        self.insert_biljka('Ruzmarin', 'ruzmarin.jpg', 60, 80, True)
+        self.insert_biljka('Tratincica', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Ruza', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Orhideja', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Narcis', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Cudna biljka', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Paprika', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Kukuruz', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Suncokret', 'krastavac.jpg', 60, 80, True)
+        self.insert_biljka('Rajcica', 'krastavac.jpg', 60, 80, True)
+
+        self.insert_posuda('Balkon', 'Ruzmarin')
+        self.insert_posuda('Dnevni', 'Bosiljak')
+
+    def insert_biljka(self,naziv, slika, vlaznost, svjetlo, supstrat, provjeri_constraint=True):
+        if provjeri_constraint:
+            sub_query = 'OR IGNORE'
+        else:
+            sub_query=''
+        query= f'INSERT {sub_query} INTO {self.biljka} (ime_biljke, slika, vlaznost, svjetlo, supstrat) VALUES (?, ?, ?, ?, ?);'
         cursor = self.connection.cursor()
         cursor.execute(query,(naziv, slika, vlaznost, svjetlo, supstrat))
         self.connection.commit()
         cursor.close()
 
-
-    def insert_posuda(self, naziv, biljka): #mozda maknuti vrijednosti ili ostaviti? execute kako?
-        query= f'INSERT INTO {self.posuda} (naziv, biljka) VALUES (?, ?);'
+    def insert_posuda(self, naziv, biljka, provjeri_constraint=True): #mozda maknuti vrijednosti ili ostaviti? execute kako?
+        if provjeri_constraint:
+            sub_query = 'OR IGNORE'
+        else:
+            sub_query=''
+        query= f'INSERT {sub_query} INTO {self.posuda} (naziv, biljka) VALUES (?, ?);'
         cursor = self.connection.cursor()
         cursor.execute(query,(naziv, biljka))
         self.connection.commit()
         cursor.close()
 
-
-    # def reset_to_defaults(self):
-
-    #     cursor = self.connection.cursor()
-    #     for table_name in [self.biljka, self.posuda]:
-    #         delete_query = f'DELETE FROM {table_name};'
-    #         cursor.execute(delete_query)
-
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Orhideja, orhideja.jpg, 40, 70, TRUE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Ruza, ruza.jpg, 60, 80, TRUE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Tulipan, tulipan.jpg, 30, 90, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Ljubicica, ljubicica.jpg, 20, 75, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Kaktus, kaktus.jpg, 10, 20, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Ljiljan, ljiljan.jpg, 50, 50, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Dalija, dalija.jpg, 40, 90, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Bozur, bozur.jpg, 60, 80, TRUE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Tratincica, tratincica.jpg, 30, 60, FALSE);'
-    #     insert_biljka = f'INSERT INTO {self.biljka} (naziv, slika, vlaznost, svjetlo, supstrat) VALUES (Mimoza, mimoza.jpg, 30, 20, FALSE);'
-
-    #     insert_posuda= f'INSERT INTO {self.posuda} (naziv, biljka) VALUES (Balkon);'
-        
-
-    #     for query in [insert_biljka, insert_posuda]:
-    #         cursor.execute(query)
-
-    #     self.connection.commit()
-    #     cursor.close()
+    def dohvati_posudu_po_imenu(self, naziv):
+        query= f'SELECT * FROM {self.posuda} WHERE naziv={naziv};'
+        cursor = self.connection.cursor()
+        resp = cursor.execute(query).fetchall()
+        self.connection.commit()
+        cursor.close()
+        return resp
 
 
-    def _update(self, table_name,column,row,value): #dodam row, pa da
+    def dohvati_sve_posude(self, join_biljke=True):
+        if join_biljke:
+            sub_query = f"JOIN {self.biljka} ON {self.biljka}.ime_biljke = {self.posuda}.biljka"
+        else:
+            sub_query = ''
+        query = f'SELECT * from {self.posuda} {sub_query};'
+        cursor = self.connection.cursor()
+        resp = cursor.execute(query).fetchall()
+        self.connection.commit()
+        cursor.close()
+        return resp
+
+
+    def dohvati_sve_biljke(self):
+        query = f'SELECT * from {self.biljka};'
+        cursor = self.connection.cursor()
+        resp = cursor.execute(query).fetchall()
+        self.connection.commit()
+        cursor.close()
+        return resp
+
+    def update_ime_posude(self, record_id, novo_ime):
+        cursor=self.connection.cursor()
+        query=f'UPDATE {self.posuda} SET naziv="{novo_ime}" WHERE id={record_id};'
+        cursor.execute(query)
+        self.connection.commit()
+        cursor.close()
+
+    def _update(self, table_name, column, row, value): #dodam row, pa da
         cursor=self.connection.cursor()
         query=f'UPDATE {table_name} SET {column,row}={value};' 
         cursor.execute(query)
@@ -120,8 +155,7 @@ def test():
     # database.insert_biljka('Mimoza', 'mimoza.jpg', 30, 20, False)
     
     database.insert_posuda ('Balkon',)
-    database.
- 
+
 
 
 
