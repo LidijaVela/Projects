@@ -118,6 +118,13 @@ class FloraDatabase:
         self.connection.commit()
         cursor.close()
 
+    def update_ime_biljke(self, record_id, novo_ime):
+        cursor=self.connection.cursor()
+        query=f'UPDATE {self.biljka} SET ime_biljke="{novo_ime}" WHERE id={record_id};'
+        cursor.execute(query)
+        self.connection.commit()
+        cursor.close()
+
     def _update(self, table_name, column, row, value): #dodam row, pa da
         cursor=self.connection.cursor()
         query=f'UPDATE {table_name} SET {column,row}={value};' 
